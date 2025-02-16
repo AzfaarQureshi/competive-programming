@@ -19,19 +19,18 @@ enum class Color { kRed, kWhite, kBlue };
 void DutchFlagPartition(int pivot_index, vector<Color>* A_ptr) {
   vector<Color>& A = *A_ptr;
   Color pivot = A[pivot_index];
-  int64_t smaller = 0;
-  for (int i = 0; i < A.size(); ++i) {
-    if (A[i] < pivot) {
-      std::swap(A[i], A[smaller]);
+
+  int64_t smaller = 0, equal = 0, larger = A.size();
+  while (equal < larger) {
+    if (A[equal] < pivot) {
+      std::swap(A[equal], A[smaller]);
       smaller++;
-    }
-  }
-  
-  int64_t larger = A.size() - 1;
-  for (int i = larger; i >= smaller; --i){
-    if (A[i] > pivot) {
-      std::swap(A[i], A[larger]);
+      equal++;
+    } else if (A[equal] > pivot) {
       larger--;
+      std::swap(A[equal], A[larger]);
+    } else {
+      equal++;
     }
   }
 }
