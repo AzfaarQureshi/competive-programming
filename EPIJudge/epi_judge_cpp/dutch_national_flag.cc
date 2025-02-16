@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <array>
+#include <cstdint>
 #include <vector>
 
 #include "test_framework/generic_test.h"
@@ -7,10 +9,34 @@
 using std::vector;
 enum class Color { kRed, kWhite, kBlue };
 
+// Solution - Start
+// [B]
+// [B,R]
+// [W,R]
+// [B,W,R]
+// [W,W,R]
+// 
 void DutchFlagPartition(int pivot_index, vector<Color>* A_ptr) {
-  // TODO - you fill in here.
-  return;
+  vector<Color>& A = *A_ptr;
+  Color pivot = A[pivot_index];
+  int64_t smaller = 0;
+  for (int i = 0; i < A.size(); ++i) {
+    if (A[i] < pivot) {
+      std::swap(A[i], A[smaller]);
+      smaller++;
+    }
+  }
+  
+  int64_t larger = A.size() - 1;
+  for (int i = larger; i >= smaller; --i){
+    if (A[i] > pivot) {
+      std::swap(A[i], A[larger]);
+      larger--;
+    }
+  }
 }
+// Solution - End
+
 void DutchFlagPartitionWrapper(TimedExecutor& executor, const vector<int>& A,
                                int pivot_idx) {
   vector<Color> colors;
